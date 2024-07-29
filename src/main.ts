@@ -68,7 +68,7 @@ const pacientes: Pacientes[] = [
         apellidos: "Kid",
         sexo: "Male",
         temperatura: 39.8,
-        frecuenciaCardiaca: 80,
+        frecuenciaCardiaca: 100,
         especialidad: "Pediatra",
         edad: 11,
     },
@@ -78,42 +78,17 @@ const pacientes: Pacientes[] = [
 
  a) Queremos extraer la lista de paciente que están asignados a la especialidad de Pediatría*/
 
-let pacientesPediatra: Pacientes[] = [];
+// let pacientesPediatra: Pacientes[] = [];
 
-const obtenPacientesAsignadosAPediatria = (
-    pacientes: Pacientes[]
-): Pacientes[] => {
+const obtenPacientesAsignadosAPediatria = pacientes.filter((pacientes: Pacientes) => pacientes.especialidad === "Pediatra")
 
-    for (let i = 0; i < pacientes.length; i++) {
-        if (pacientes[i].especialidad === "Pediatra") {
-            pacientesPediatra.push(pacientes[i]);
-        }
-    }
-
-    return pacientesPediatra;
-};
-
-console.log(obtenPacientesAsignadosAPediatria(pacientes));
-console.log(pacientesPediatra)
+console.log(obtenPacientesAsignadosAPediatria);
 
 // b) Queremos extraer la lista de pacientes asignados a Pediatría y que tengan una edad menor de 10 años.
 
-let pacientesPediatraMenorDiezAnios: Pacientes[] = [];
+const obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios = pacientes.filter((pacientes: Pacientes) => pacientes.especialidad === "Pediatra" && pacientes.edad < 10)
 
-const obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios = (
-    pacientes: Pacientes[]
-): Pacientes[] => {
-
-    for (let i = 0; i < pacientes.length; i++) {
-        if (pacientes[i].especialidad === "Pediatra" && pacientes[i].edad < 10) {
-            pacientesPediatraMenorDiezAnios.push(pacientes[i]);
-        }
-    }
-
-    return pacientesPediatraMenorDiezAnios;
-};
-
-console.log(obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios(pacientes));
+console.log(obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios);
 
 
 /* Apartado 2
@@ -122,63 +97,27 @@ Queremos activar el protocolo de urgencia si cualquier de los pacientes tiene un
 
 Es decir, crear una función que devuelve true / false dependiendo si se da la condición, algo así como: */
 
-let pacientesProtocoloUrgencia: Pacientes[] = [];
+const activarProtocoloUrgencia = pacientes.some((pacientes: Pacientes) => pacientes.frecuenciaCardiaca > 100 && pacientes.temperatura > 39)
 
-const activarProtocoloUrgencia = (pacientes: Pacientes[]): boolean => {
-    let activarProtocolo = false;
-
-    for (let i = 0; i < pacientes.length; i++) {
-        if (pacientes[i].frecuenciaCardiaca > 100 && pacientes[i].temperatura > 39) {
-
-            activarProtocolo = true;
-            return activarProtocolo
-        }
-    }
-
-    return activarProtocolo
-};
-
-console.log(activarProtocoloUrgencia(pacientes));
-console.log(pacientesProtocoloUrgencia)
+console.log(activarProtocoloUrgencia);
 
 /* Apartado 3
 El pediatra no puede atender hoy a los pacientes, queremos reasignar los pacientes asignados a la especialidad de pediatría a la de medico de familia. */
-let nuevosPacientesMedicoFamilia: Pacientes[] = [];
 
-const reasignaPacientesAMedicoFamilia = (
-    pacientes: Pacientes[]
-): Pacientes[] => {
+const reasignaPacientesAMedicoFamilia: Pacientes[] =
+    pacientes.map((pacientes: Pacientes) => ({
+        ...pacientes,
+        especialidad: pacientes.especialidad === 'Pediatra' ? 'Medico de familia' : pacientes.especialidad
+    }));
 
-    for (let i = 0; i < pacientes.length; i++) {
-        if (pacientes[i].especialidad === "Pediatra") {
-            pacientes[i].especialidad = "Medico de familia";
-            nuevosPacientesMedicoFamilia.push(pacientes[i]); //He puesto este push para aislar los que eran de pediatria y se reasignaban a medico de familia.
-        }
-    }
-    return nuevosPacientesMedicoFamilia
-};
-
-console.log(reasignaPacientesAMedicoFamilia(pacientes));
-console.log(nuevosPacientesMedicoFamilia);
+console.log(reasignaPacientesAMedicoFamilia);
 
 /* Apartado 4
 Queremos saber si podemos mandar al Pediatra a casa(si no tiene pacientes asignados), comprobar si en la lista hay algún paciente asignado a pediatría */
 
-const HayPacientesDePediatria = (pacientes: Pacientes[]): boolean => {
+const HayPacientesDePediatria: boolean = pacientes.some((pacientes: Pacientes) => pacientes.especialidad === "Pediatra");
 
-    let pacientesPediatra = false;
-
-    for (let i = 0; i < pacientes.length; i++) {
-        if (pacientes[i].especialidad === "Pediatra") {
-            pacientesPediatra = true;
-            return pacientesPediatra
-        }
-    }
-
-    return pacientesPediatra
-};
-
-console.log("¿Hay pacientes de Pediatria?", HayPacientesDePediatria(pacientes));
+console.log("¿Hay pacientes de Pediatria?", HayPacientesDePediatria);
 
 /* Apartado 5
 Queremos calcular el número total de pacientes que están asignados a la especialidad de Medico de familia, y lo que están asignados a Pediatría y a cardiología*/
@@ -188,36 +127,55 @@ interface NumeroPacientesPorEspecialidad {
     pediatria: number;
     cardiologia: number;
 }
-const cuentaPacientesPorEspecialidad = (
-    pacientes: Pacientes[]
-): NumeroPacientesPorEspecialidad => {
 
-    const conteoPacientes: NumeroPacientesPorEspecialidad = {
-        medicoDeFamilia: 0,
-        pediatria: 0,
-        cardiologia: 0,
-    }
-    let i = 0;
-    while (i < pacientes.length) {
-        switch (pacientes[i].especialidad) {
-            case "Medico de familia":
-                conteoPacientes.medicoDeFamilia++
-                break;
-            case "Pediatra":
-                conteoPacientes.pediatria++
-                break;
-            case "Cardiólogo":
-                conteoPacientes.cardiologia++
-                break;
-            default:
-                break;
-        }
-        i++;
-    }
+const numeroPacientes: NumeroPacientesPorEspecialidad = {
+    medicoDeFamilia: 0,
+    pediatria: 0,
+    cardiologia: 0,
+}
+// const cuentaPacientesPorEspecialidad = (
+//     pacientes: Pacientes[]
+// ): NumeroPacientesPorEspecialidad => {
 
-    return conteoPacientes
+//     const conteoPacientes: NumeroPacientesPorEspecialidad = {
+//         medicoDeFamilia: 0,
+//         pediatria: 0,
+//         cardiologia: 0,
+//     }
+//     let i = 0;
+//     while (i < pacientes.length) {
+//         switch (pacientes[i].especialidad) {
+//             case "Medico de familia":
+//                 conteoPacientes.medicoDeFamilia++
+//                 break;
+//             case "Pediatra":
+//                 conteoPacientes.pediatria++
+//                 break;
+//             case "Cardiólogo":
+//                 conteoPacientes.cardiologia++
+//                 break;
+//             default:
+//                 break;
+//         }
+//         i++;
+//     }
 
-};
+//     return conteoPacientes
 
-const conteoPacientesEspecialidad = cuentaPacientesPorEspecialidad(pacientes)
-console.log(conteoPacientesEspecialidad);
+// };
+
+// const cuentaPacientesPorEspecialidad2 = pacientes.reduce((total, pacientes): NumeroPacientesPorEspecialidad => total + numeroPacientes.medicoDeFamilia, 0)
+
+const numeroPacientesPorEspecialidad: NumeroPacientesPorEspecialidad = pacientes.reduce((acc, pacientes) => {
+    acc[pacientes.especialidad]++;
+    return acc;
+}, {
+    medicoDeFamilia: 0,
+    pediatria: 0,
+    cardiologia: 0,
+});
+
+console.log(numeroPacientesPorEspecialidad);
+
+// const conteoPacientesEspecialidad = cuentaPacientesPorEspecialidad(pacientes)
+// console.log(conteoPacientesEspecialidad);
