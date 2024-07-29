@@ -82,14 +82,17 @@ const pacientes: Pacientes[] = [
 
 const obtenPacientesAsignadosAPediatria = pacientes.filter((pacientes: Pacientes) => pacientes.especialidad === "Pediatra")
 
-console.log(obtenPacientesAsignadosAPediatria);
+const pacientesPediatria = () => obtenPacientesAsignadosAPediatria
+
+console.log(pacientesPediatria());
 
 // b) Queremos extraer la lista de pacientes asignados a Pediatría y que tengan una edad menor de 10 años.
 
 const obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios = pacientes.filter((pacientes: Pacientes) => pacientes.especialidad === "Pediatra" && pacientes.edad < 10)
 
-console.log(obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios);
+const pacientesPediatriaMenorDiezAnios = () => obtenPacientesAsignadosAPediatriaYMenorDeDiezAnios
 
+console.log(pacientesPediatriaMenorDiezAnios());
 
 /* Apartado 2
 
@@ -99,7 +102,9 @@ Es decir, crear una función que devuelve true / false dependiendo si se da la c
 
 const activarProtocoloUrgencia = pacientes.some((pacientes: Pacientes) => pacientes.frecuenciaCardiaca > 100 && pacientes.temperatura > 39)
 
-console.log(activarProtocoloUrgencia);
+const protocoloUrgencia = () => activarProtocoloUrgencia
+
+console.log(protocoloUrgencia());
 
 /* Apartado 3
 El pediatra no puede atender hoy a los pacientes, queremos reasignar los pacientes asignados a la especialidad de pediatría a la de medico de familia. */
@@ -110,14 +115,18 @@ const reasignaPacientesAMedicoFamilia: Pacientes[] =
         especialidad: pacientes.especialidad === 'Pediatra' ? 'Medico de familia' : pacientes.especialidad
     }));
 
-console.log(reasignaPacientesAMedicoFamilia);
+const pacientesNuevosMedicoFamilia = () => reasignaPacientesAMedicoFamilia
+
+console.log(pacientesNuevosMedicoFamilia());
 
 /* Apartado 4
 Queremos saber si podemos mandar al Pediatra a casa(si no tiene pacientes asignados), comprobar si en la lista hay algún paciente asignado a pediatría */
 
 const HayPacientesDePediatria: boolean = pacientes.some((pacientes: Pacientes) => pacientes.especialidad === "Pediatra");
 
-console.log("¿Hay pacientes de Pediatria?", HayPacientesDePediatria);
+const compruebaPacientesPediatra = () => HayPacientesDePediatria;
+
+console.log("¿Hay pacientes de Pediatria?", compruebaPacientesPediatra());
 
 /* Apartado 5
 Queremos calcular el número total de pacientes que están asignados a la especialidad de Medico de familia, y lo que están asignados a Pediatría y a cardiología*/
@@ -128,54 +137,22 @@ interface NumeroPacientesPorEspecialidad {
     cardiologia: number;
 }
 
-const numeroPacientes: NumeroPacientesPorEspecialidad = {
+const conteoPacientes: NumeroPacientesPorEspecialidad = {
     medicoDeFamilia: 0,
     pediatria: 0,
     cardiologia: 0,
 }
-// const cuentaPacientesPorEspecialidad = (
-//     pacientes: Pacientes[]
-// ): NumeroPacientesPorEspecialidad => {
 
-//     const conteoPacientes: NumeroPacientesPorEspecialidad = {
-//         medicoDeFamilia: 0,
-//         pediatria: 0,
-//         cardiologia: 0,
-//     }
-//     let i = 0;
-//     while (i < pacientes.length) {
-//         switch (pacientes[i].especialidad) {
-//             case "Medico de familia":
-//                 conteoPacientes.medicoDeFamilia++
-//                 break;
-//             case "Pediatra":
-//                 conteoPacientes.pediatria++
-//                 break;
-//             case "Cardiólogo":
-//                 conteoPacientes.cardiologia++
-//                 break;
-//             default:
-//                 break;
-//         }
-//         i++;
-//     }
+const cuentaPacientesMedicoFamilia: number = pacientes.reduce((acc, pacientes) => acc + (pacientes.especialidad === "Medico de familia" ? conteoPacientes.medicoDeFamilia++ : conteoPacientes.medicoDeFamilia), 0)
 
-//     return conteoPacientes
+const cuentaPacientesPediatra: number = pacientes.reduce((acc, pacientes) => acc + (pacientes.especialidad === "Pediatra" ? conteoPacientes.pediatria++ : conteoPacientes.pediatria), 0)
 
-// };
+const cuentaPacientesCardiologo: number = pacientes.reduce((acc, pacientes) => acc + (pacientes.especialidad === "Cardiólogo" ? conteoPacientes.cardiologia++ : conteoPacientes.cardiologia), 0)
 
-// const cuentaPacientesPorEspecialidad2 = pacientes.reduce((total, pacientes): NumeroPacientesPorEspecialidad => total + numeroPacientes.medicoDeFamilia, 0)
+const numeroPacientes = () => conteoPacientes;
+console.log(numeroPacientes());
 
-const numeroPacientesPorEspecialidad: NumeroPacientesPorEspecialidad = pacientes.reduce((acc, pacientes) => {
-    acc[pacientes.especialidad]++;
-    return acc;
-}, {
-    medicoDeFamilia: 0,
-    pediatria: 0,
-    cardiologia: 0,
-});
 
-console.log(numeroPacientesPorEspecialidad);
 
 // const conteoPacientesEspecialidad = cuentaPacientesPorEspecialidad(pacientes)
 // console.log(conteoPacientesEspecialidad);
